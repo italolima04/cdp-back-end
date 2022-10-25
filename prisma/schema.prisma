@@ -9,3 +9,97 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+enum Gender {
+  male      @map("Masculino")
+  female    @map("Feminino")
+  notBinary @map("Não Binário")
+  others    @map("Outros")
+  notInform @map("Prefiro Não Informar")
+}
+
+model User {
+  id            String         @id @default(uuid())
+  firstName     String
+  lastName      String?
+  email         String         @unique
+  phone         String
+  password      String
+  birthdate     DateTime
+  gender        Gender
+  avatar        String
+  street        String
+  city          String
+  neighbourhood String
+  zipcode       String
+  state         String
+  country       String
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  Subscription  Subscription[]
+}
+
+model Manager {
+  id            String   @id @default(uuid())
+  firstName     String
+  lastName      String?
+  email         String   @unique
+  phone         String
+  password      String
+  birthdate     DateTime
+  gender        Gender
+  avatar        String
+  street        String
+  city          String
+  neighbourhood String
+  zipcode       String
+  state         String
+  country       String
+  status        Boolean
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model WaitList {
+  id        String   @id @default(uuid())
+  value     String   @unique
+  approved  Boolean
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Plan {
+  id           String         @id @default(uuid())
+  title        String         @unique
+  description  String
+  status       Boolean
+  planStripeId String
+  price        Float
+  productId    String
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  product      Product        @relation(fields: [productId], references: [id])
+  Subscription Subscription[]
+}
+
+model Product {
+  id          String   @id @default(uuid())
+  title       String   @unique
+  description String
+  price       Float
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  Plan        Plan[]
+}
+
+model Subscription {
+  id             String   @id @default(uuid())
+  planId         String   @unique
+  userId         String
+  status         Boolean
+  paymentMethods String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  plan           Plan     @relation(fields: [planId], references: [id])
+  user           User     @relation(fields: [userId], references: [id])
+}
