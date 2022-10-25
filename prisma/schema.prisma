@@ -103,3 +103,6 @@ model Subscription {
   plan           Plan     @relation(fields: [planId], references: [id])
   user           User     @relation(fields: [userId], references: [id])
 }
+
+=======
+>>>>>>> f781211 (chore: initial structure of project)
