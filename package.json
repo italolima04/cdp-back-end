@@ -23,7 +23,10 @@
   "dependencies": {
     "@nestjs/common": "^8.0.0",
     "@nestjs/core": "^8.0.0",
+<<<<<<< HEAD
     "@nestjs/mapped-types": "*",
+=======
+>>>>>>> f781211 (chore: initial structure of project)
     "@nestjs/platform-express": "^8.0.0",
     "@prisma/client": "^4.4.0",
     "prisma": "^4.4.0",
