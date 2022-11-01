@@ -21,6 +21,7 @@
       "@/*": ["src/*"],
       "@App/*": ["src/app/*"],
       "@Modules/*": ["src/modules/*"],
+      "@Erros/*": ["src/errors/*"]
     }
   }
 }
