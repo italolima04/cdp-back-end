@@ -21,7 +21,8 @@
       "@/*": ["src/*"],
       "@App/*": ["src/app/*"],
       "@Modules/*": ["src/modules/*"],
-      "@Erros/*": ["src/errors/*"]
+      "@Erros/*": ["src/errors/*"],
+      "@Prisma/*": ["src/modules/prisma/*"]
     }
   }
 }
