@@ -23,11 +23,12 @@ model User {
   firstName     String
   lastName      String?
   email         String         @unique
+  cpf           String         @unique
   phone         String
   password      String
   birthdate     DateTime
   gender        Gender
-  avatar        String
+  avatar        String?
   street        String
   city          String
   neighbourhood String
