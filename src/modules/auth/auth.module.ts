@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
-import secret from '../../config/jwt-config';
-import { PrismaService } from '../prisma';
-import { AuthController } from './controller/auth/auth.controller';
+import secret from '@Config/jwt-config';
+import { PrismaService } from '@Prisma/index';
+
+import { AuthController } from './controller/auth.controller';
 import { AuthService } from './services/auth.service';
 
 @Module({

@@ -1,9 +1,3 @@
-import { ManagerModule } from '@Modules/manager/manager.module';
-import { PlanModule } from '@Modules/plan/plan.module';
-import { ProductModule } from '@Modules/product/product.module';
-import { SubscriptionModule } from '@Modules/subscription/subscription.module';
-import { UserModule } from '@Modules/user/user.module';
-import { WaitlistModule } from '@Modules/waitlist/waitlist.module';
 import {
   MiddlewareConsumer,
   Module,
@@ -11,8 +5,15 @@ import {
   RequestMethod,
 } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { EnsureAuthenticatedMiddleware } from '../middlewares/middlewares';
-import { AuthModule } from '../modules/auth/auth.module';
+import { ManagerModule } from '@Modules/manager/manager.module';
+import { PlanModule } from '@Modules/plan/plan.module';
+import { ProductModule } from '@Modules/product/product.module';
+import { SubscriptionModule } from '@Modules/subscription/subscription.module';
+import { UserModule } from '@Modules/user/user.module';
+import { WaitlistModule } from '@Modules/waitlist/waitlist.module';
+import { AuthModule } from '@Modules/auth/auth.module';
+import { EnsureAuthenticatedMiddleware } from '@Middleware/middlewares';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 

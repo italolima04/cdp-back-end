@@ -14,8 +14,9 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { CreateSessionDTO } from '../../dtos/create-session.dto';
-import { AuthService } from '../../services/auth.service';
+
+import { CreateSessionDTO } from '../dtos/create-session.dto';
+import { AuthService } from '../services/auth.service';
 
 @ApiTags('auth')
 @Controller('auth')
