@@ -4,7 +4,6 @@ import {
   Post,
   Body,
   Patch,
-  Param,
   UsePipes,
   UseInterceptors,
   ValidationPipe,
@@ -26,7 +25,8 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
-import uploadConfig from '@/config/upload.config';
+import uploadConfig from '@Config/upload.config';
+import { UserDecorator } from '@Decoratator/user.decorator';
 
 import UserService from '../services/user.service';
 import CreateUserDto from '../dtos/create-user.dto';
@@ -38,7 +38,7 @@ import User from '../entities/user.entity';
 class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Get(':id')
+  @Get()
   @UsePipes(ValidationPipe)
   @UseInterceptors(ClassSerializerInterceptor)
   @ApiQuery({
@@ -65,10 +65,10 @@ class UserController {
     description: 'Erro interno no servidor.',
   })
   async me(
-    @Param('id') id: string,
+    @UserDecorator() user: User,
     @Query('avatar', new DefaultValuePipe(false), ParseBoolPipe) avatar = false,
-  ) {
-    return await this.userService.me({ id, avatar });
+  ): Promise<User> {
+    return await this.userService.me({ id: user.id, avatar });
   }
 
   @Post()
@@ -92,7 +92,7 @@ class UserController {
     return await this.userService.create(createUserDto);
   }
 
-  @Patch(':id')
+  @Patch()
   @UsePipes(ValidationPipe)
   @UseInterceptors(ClassSerializerInterceptor)
   @ApiOperation({
@@ -113,13 +113,13 @@ class UserController {
     description: 'Erro interno no servidor.',
   })
   async update(
-    @Param('id') id: string,
+    @UserDecorator() user: User,
     @Body() updatedUser: UpdateUserDto,
   ): Promise<User> {
-    return await this.userService.update(id, updatedUser);
+    return await this.userService.update(user.id, updatedUser);
   }
 
-  @Patch('avatar/:id')
+  @Patch('avatar')
   @UsePipes(ValidationPipe)
   @UseInterceptors(ClassSerializerInterceptor)
   @UseInterceptors(FileInterceptor('avatar', uploadConfig))
@@ -150,10 +150,13 @@ class UserController {
     description: 'Erro interno no servidor.',
   })
   async updateAvatar(
-    @Param('id') id: string,
+    @UserDecorator() user: User,
     @UploadedFile() avatar,
   ): Promise<User> {
-    return await this.userService.updateAvatar({ id, avatar: avatar.filename });
+    return await this.userService.updateAvatar({
+      id: user.id,
+      avatar: avatar.filename,
+    });
   }
 }
 

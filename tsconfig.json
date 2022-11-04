@@ -26,7 +26,8 @@
       "@Config/*": ["src/config/*"],
       "@Auth/*": ["src/modules/auth/*"],
       "@Middleware/*": ["src/middlewares/*"],
-      "@Decoratator/*": ["src/decorators/*"]
+      "@Decoratator/*": ["src/decorators/*"],
+      "@Utils/*": ["src/utils/*"]
     }
   }
 }
