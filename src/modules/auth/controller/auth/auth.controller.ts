@@ -12,10 +12,12 @@ import {
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
+  ApiTags,
 } from '@nestjs/swagger';
-import { ICreateSessionDTO } from '../../dtos/ICreateSessionDTO';
+import { CreateSessionDTO } from '../../dtos/create-session.dto';
 import { AuthService } from '../../services/auth.service';
 
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
@@ -29,17 +31,14 @@ export class AuthController {
   })
   @ApiOkResponse({
     description: 'Retorna um token JWT',
-    status: 200,
   })
   @ApiNotFoundResponse({
     description: 'Usuário não encontrado',
-    status: 401,
   })
   @ApiInternalServerErrorResponse({
     description: 'Erro interno no servidor',
-    status: 500,
   })
-  async login(@Body() { email, password }: ICreateSessionDTO) {
+  async login(@Body() { email, password }: CreateSessionDTO) {
     return await this.authService.execute({ email, password });
   }
 }

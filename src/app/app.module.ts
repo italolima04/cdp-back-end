@@ -4,8 +4,14 @@ import { ProductModule } from '@Modules/product/product.module';
 import { SubscriptionModule } from '@Modules/subscription/subscription.module';
 import { UserModule } from '@Modules/user/user.module';
 import { WaitlistModule } from '@Modules/waitlist/waitlist.module';
-import { Module } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { EnsureAuthenticatedMiddleware } from '../middlewares/middlewares';
 import { AuthModule } from '../modules/auth/auth.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -25,4 +31,14 @@ import { AppService } from './app.service';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(EnsureAuthenticatedMiddleware)
+      .exclude(
+        { path: '/api/v1/user', method: RequestMethod.POST },
+        { path: '/api/v1/auth', method: RequestMethod.POST },
+      )
+      .forRoutes('*');
+  }
+}

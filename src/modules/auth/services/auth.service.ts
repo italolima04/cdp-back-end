@@ -4,7 +4,7 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { ICreateSessionDTO } from '../dtos/ICreateSessionDTO';
+import { CreateSessionDTO } from '../dtos/create-session.dto';
 import { BCryptHashProvider } from '../providers/HashProvider/implementations/BCryptHashProvider';
 import IHashProvider from '../providers/HashProvider/models/IHashProvider';
 import { JwtService } from '@nestjs/jwt';
@@ -18,7 +18,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async execute({ email, password }: ICreateSessionDTO) {
+  async execute({ email, password }: CreateSessionDTO) {
     const user = await this.prismaService.user.findFirst({
       where: { email },
     });
@@ -37,11 +37,13 @@ export class AuthService {
     if (!verifyUserPassword) {
       throw new UnauthorizedException('Combinação de e-mail/senha incorreta');
     }
-    return this.jwtService.sign({
-      id: user.id,
-      name: user.firstName,
-      lastname: user.lastName,
-      email: user.email,
-    });
+    return {
+      token: this.jwtService.sign({
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+      }),
+    };
   }
 }
