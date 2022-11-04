@@ -1,20 +1,17 @@
 import {
-  Inject,
   Injectable,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { CreateSessionDTO } from '../dtos/create-session.dto';
-import { BCryptHashProvider } from '../providers/HashProvider/implementations/BCryptHashProvider';
-import IHashProvider from '../providers/HashProvider/models/IHashProvider';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../../prisma';
+import { compare } from 'bcryptjs';
 
 @Injectable()
 export class AuthService {
   constructor(
     private prismaService: PrismaService,
-    @Inject(BCryptHashProvider) private readonly HashProvider: IHashProvider,
     private jwtService: JwtService,
   ) {}
 
@@ -29,10 +26,7 @@ export class AuthService {
       );
     }
 
-    const verifyUserPassword = await this.HashProvider.compareHash(
-      password,
-      user.password,
-    );
+    const verifyUserPassword = await compare(password, user.password);
 
     if (!verifyUserPassword) {
       throw new UnauthorizedException('Combinação de e-mail/senha incorreta');
