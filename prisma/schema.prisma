@@ -65,7 +65,6 @@ model WaitList {
   id             String   @id @default(uuid())
   name           String
   email          String   @unique
-  approved       Boolean
   city           String
   state          String
   note           String
