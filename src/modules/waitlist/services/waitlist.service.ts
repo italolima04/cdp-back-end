@@ -13,9 +13,6 @@ export class WaitlistService {
     try {
       const { email } = createWaitlistDTO;
 
-      console.log(process.env.EMAIL);
-      console.log(process.env.PASSWORD);
-
       const existsRegisterOnWaitlist = await this.prisma.waitList.findUnique({
         where: {
           email,

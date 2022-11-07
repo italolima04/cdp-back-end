@@ -11,7 +11,7 @@ export const mailerConfig: MailerOptions = {
     },
   },
   transport: {
-    host: 'smtp.gmail.com',
+    host: 'smtp.zoho.com',
     port: 465,
     secure: true,
     auth: {
