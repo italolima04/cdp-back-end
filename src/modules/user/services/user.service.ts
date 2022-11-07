@@ -7,7 +7,7 @@ import { hash } from 'bcrypt';
 import { PrismaService } from '@Prisma/index';
 import { join } from 'path';
 import { promises } from 'fs';
-import uploadConfig from '@/config/upload.config';
+import uploadConfig from '@Config/upload.config';
 
 import CreateUserDto from '../dtos/create-user.dto';
 import UpdateUserDto from '../dtos/update-user.dto';
@@ -32,7 +32,7 @@ class UserService {
       user.avatar = `${process.env.URL_FILES_AVATAR}${user.avatar}`;
     }
 
-    return user;
+    return new User({ ...user });
   }
 
   async create(createUserDto: CreateUserDto): Promise<User> {
@@ -63,7 +63,7 @@ class UserService {
       },
     });
 
-    return createdUser;
+    return new User({ ...createdUser });
   }
 
   async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
@@ -114,7 +114,7 @@ class UserService {
       data: { ...updateUserDto },
     });
 
-    return updatedUser;
+    return new User({ ...updatedUser });
   }
 
   async updateAvatar({ id, avatar }: UpdateAvatarDto): Promise<User> {
@@ -140,7 +140,7 @@ class UserService {
       data: { avatar },
     });
 
-    return updatedUserAvatar;
+    return new User({ ...updatedUserAvatar });
   }
 }
 
