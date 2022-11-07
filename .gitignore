@@ -1,6 +1,9 @@
 # compiled output
 /dist
 /node_modules
+/postgres_data
+uploads/*
+!uploads/.gitkeep
 
 # Logs
 logs

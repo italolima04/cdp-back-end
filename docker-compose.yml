@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  database:
+    container_name: 'database-backend-cdp'
+    image: 'postgres:13-alpine'
+    environment:
+      - POSTGRES_USER=cdp
+      - POSTGRES_PASSWORD=cdp2022.2
+      - POSTGRES_DB=cdp
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    restart: always
+    networks:
+      - backend-cdp
+
+networks:
+  backend-cdp:
+    driver: bridge

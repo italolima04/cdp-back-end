@@ -21,6 +21,12 @@
       "@/*": ["src/*"],
       "@App/*": ["src/app/*"],
       "@Modules/*": ["src/modules/*"],
+      "@Erros/*": ["src/errors/*"],
+      "@Prisma/*": ["src/modules/prisma/*"],
+      "@Config/*": ["src/config/*"],
+      "@Auth/*": ["src/modules/auth/*"],
+      "@Middleware/*": ["src/middlewares/*"],
+      "@Decoratator/*": ["src/decorators/*"]
     }
   }
 }

@@ -1,4 +1,11 @@
 import { mailerConfig } from '@/config/mailer.config';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { ManagerModule } from '@Modules/manager/manager.module';
 import { PlanModule } from '@Modules/plan/plan.module';
 import { ProductModule } from '@Modules/product/product.module';
@@ -8,12 +15,15 @@ import { WaitlistModule } from '@Modules/waitlist/waitlist.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from '@Modules/auth/auth.module';
+import { EnsureAuthenticatedMiddleware } from '@Middleware/middlewares';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({ isGlobal: true }),
     UserModule,
     ManagerModule,
     WaitlistModule,
@@ -21,9 +31,20 @@ import { AppService } from './app.service';
     ProductModule,
     SubscriptionModule,
     MailerModule.forRoot(mailerConfig),
+    AuthModule,
   ],
 
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(EnsureAuthenticatedMiddleware)
+      .exclude(
+        { path: '/api/v1/user', method: RequestMethod.POST },
+        { path: '/api/v1/auth', method: RequestMethod.POST },
+      )
+      .forRoutes('*');
+  }
+}
