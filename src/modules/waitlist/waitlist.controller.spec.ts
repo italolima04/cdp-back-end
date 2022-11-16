@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { WaitlistController } from './waitlist.controller';
-import { WaitlistService } from './waitlist.service';
+import { WaitlistController } from './controller/waitlist.controller';
+import { WaitlistService } from './services/waitlist.service';
 
 describe('WaitlistController', () => {
   let controller: WaitlistController;

@@ -16,6 +16,8 @@ enum Gender {
   notBinary @map("Não Binário")
   others    @map("Outros")
   notInform @map("Prefiro Não Informar")
+
+  @@map("gender")
 }
 
 model User {
@@ -23,11 +25,12 @@ model User {
   firstName     String
   lastName      String?
   email         String         @unique
+  cpf           String         @unique
   phone         String
   password      String
   birthdate     DateTime
   gender        Gender
-  avatar        String
+  avatar        String?
   street        String
   city          String
   neighbourhood String
@@ -37,6 +40,8 @@ model User {
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
   Subscription  Subscription[]
+
+  @@map("user")
 }
 
 model Manager {
@@ -58,14 +63,22 @@ model Manager {
   status        Boolean
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+
+  @@map("manager")
 }
 
 model WaitList {
-  id        String   @id @default(uuid())
-  value     String   @unique
-  approved  Boolean
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id             String   @id @default(uuid())
+  name           String
+  email          String   @unique
+  city           String
+  state          String
+  note           String
+  receiveUpdates Boolean
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@map("waitlist")
 }
 
 model Plan {
@@ -80,6 +93,8 @@ model Plan {
   updatedAt    DateTime       @updatedAt
   product      Product        @relation(fields: [productId], references: [id])
   Subscription Subscription[]
+
+  @@map("plan")
 }
 
 model Product {
@@ -90,6 +105,8 @@ model Product {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   Plan        Plan[]
+
+  @@map("product")
 }
 
 model Subscription {
@@ -102,7 +119,6 @@ model Subscription {
   updatedAt      DateTime @updatedAt
   plan           Plan     @relation(fields: [planId], references: [id])
   user           User     @relation(fields: [userId], references: [id])
-}
 
-=======
->>>>>>> f781211 (chore: initial structure of project)
+  @@map("subscription")
+}

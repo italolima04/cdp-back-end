@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { WaitlistService } from './waitlist.service';
+import { WaitlistService } from './services/waitlist.service';
 
 describe('WaitlistService', () => {
   let service: WaitlistService;
