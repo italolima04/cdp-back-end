@@ -13,8 +13,6 @@ import { SubscriptionModule } from '@Modules/subscription/subscription.module';
 import { UserModule } from '@Modules/user/user.module';
 import { WaitlistModule } from '@Modules/waitlist/waitlist.module';
 import { MailerModule } from '@nestjs-modules/mailer';
-import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from '@Modules/auth/auth.module';
 import { EnsureAuthenticatedMiddleware } from '@Middleware/middlewares';
 
