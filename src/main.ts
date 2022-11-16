@@ -9,6 +9,7 @@ import uploadConfig from '@Config/upload.config';
 (async () => {
   const app = (await NestFactory.create(AppModule)).setGlobalPrefix('api/v1');
   setupSwagger(app);
+  app.enableCors();
 
   app.use('/files', expressStatic(uploadConfig.directory));
 
