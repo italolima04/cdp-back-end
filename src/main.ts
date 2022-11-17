@@ -16,5 +16,5 @@ import uploadConfig from '@Config/upload.config';
   const { httpAdapter } = app.get(HttpAdapterHost);
   app.useGlobalFilters(new ExceptionFilter(httpAdapter));
 
-  await app.listen(process.env.PORT || 3333);
+  await app.listen(4000);
 })();
