@@ -7,9 +7,10 @@ import { AuthController } from './controller/auth.controller';
 import { AuthService } from './services/auth.service';
 import { PrismaService } from '../prisma';
 import SendEmailWithTokenService from './services/send-email-with-token.service';
-import RedefinePasswordService from './services/redefine-password.service';
 import SendEmailConfirmRecoverPasswordService from './services/send-email-confirm-recover-password.service';
 import SendEmailWithTokenForRecoverPasswordService from './services/send-email-with-token-for-recover-password.service';
+import RedefinePasswordService from './services/redefine-password.service';
+import { VerifyTokenService } from './services/verify-token.service';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import SendEmailWithTokenForRecoverPasswordService from './services/send-email-w
     RedefinePasswordService,
     SendEmailConfirmRecoverPasswordService,
     SendEmailWithTokenForRecoverPasswordService,
+    VerifyTokenService,
   ],
 })
 export class AuthModule {}

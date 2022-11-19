@@ -17,7 +17,9 @@ class SendEmailWithTokenService {
     });
 
     if (!user) {
-      throw new NotFoundException('This user does not exists in database');
+      throw new NotFoundException(
+        'Este usuário não existe no nosso banco de dados',
+      );
     }
 
     const lastToken = await this.prismaService.usersToken.findFirst({
