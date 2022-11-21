@@ -18,6 +18,7 @@ import { EnsureAuthenticatedMiddleware } from '@Middleware/middlewares';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { ShipmentModule } from '@/shipment/shipment.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { AppService } from './app.service';
     PlanModule,
     ProductModule,
     SubscriptionModule,
+    ShipmentModule,
     MailerModule.forRoot(mailerConfig),
     AuthModule,
   ],
@@ -43,6 +45,18 @@ export class AppModule implements NestModule {
         { path: '/api/v1/user', method: RequestMethod.POST },
         { path: '/api/v1/auth', method: RequestMethod.POST },
         { path: '/api/v1/waitlist', method: RequestMethod.POST },
+        {
+          path: '/api/v1/shipment/calculate/:zipCode',
+          method: RequestMethod.GET,
+        },
+        {
+          path: '/api/v1/shipment/consult/:zipCode',
+          method: RequestMethod.GET,
+        },
+        {
+          path: '/api/v1/shipment/track/:trackingCode',
+          method: RequestMethod.GET,
+        },
       )
       .forRoutes('*');
   }

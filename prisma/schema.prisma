@@ -98,6 +98,22 @@ model Plan {
   @@map("plan")
 }
 
+model Address {
+  id            String         @id @default(uuid())
+  street        String
+  neighbourhood String
+  city          String
+  zipcode       String
+  state         String
+  country       String
+  complement    String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  Subscription  Subscription[]
+
+  @@map("address")
+}
+
 model Product {
   id          String   @id @default(uuid())
   title       String   @unique
@@ -110,16 +126,33 @@ model Product {
   @@map("product")
 }
 
+model Coupon {
+  id          String    @id @default(uuid())
+  title       String
+  description String
+  benefit     String?
+  discount    Float?
+  isPermanent Boolean
+  initialDate DateTime?
+  expiredDate DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@map("coupon")
+}
+
 model Subscription {
   id             String   @id @default(uuid())
   planId         String   @unique
   userId         String
   status         Boolean
   paymentMethods String
+  addressId      String
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
   plan           Plan     @relation(fields: [planId], references: [id])
   user           User     @relation(fields: [userId], references: [id])
+  address        Address  @relation(fields: [addressId], references: [id])
 
   @@map("subscription")
 }
