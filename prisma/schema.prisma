@@ -2,7 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native"]
 }
 
 datasource db {
@@ -40,6 +41,7 @@ model User {
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
   Subscription  Subscription[]
+  UsersToken    UsersToken[]
 
   @@map("user")
 }
@@ -121,4 +123,19 @@ model Subscription {
   user           User     @relation(fields: [userId], references: [id])
 
   @@map("subscription")
+}
+
+model UsersToken {
+  id         String    @id @default(uuid())
+  token      String    @default(uuid())
+  used       Boolean   @default(false)
+  used_in    DateTime?
+  expires_in DateTime?
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+
+  users_id String
+  user     User   @relation(fields: [users_id], references: [id])
+
+  @@map("userstoken")
 }
