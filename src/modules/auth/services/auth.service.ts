@@ -4,8 +4,8 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { PrismaService } from '@Prisma/index';
 import { compare } from 'bcryptjs';
+import { PrismaService } from '../../prisma';
 
 import { CreateSessionDTO } from '../dtos/create-session.dto';
 
@@ -20,7 +20,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async execute({
+  async authenticate({
     email,
     password,
   }: CreateSessionDTO): Promise<IResponseLoginDTO> {

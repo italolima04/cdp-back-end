@@ -41,6 +41,7 @@ model User {
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
   Subscription  Subscription[]
+  UsersToken    UsersToken[]
 
   @@map("user")
 }
@@ -155,4 +156,19 @@ model Subscription {
   address        Address  @relation(fields: [addressId], references: [id])
 
   @@map("subscription")
+}
+
+model UsersToken {
+  id         String    @id @default(uuid())
+  token      String    @default(uuid())
+  used       Boolean   @default(false)
+  used_in    DateTime?
+  expires_in DateTime?
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+
+  users_id String
+  user     User   @relation(fields: [users_id], references: [id])
+
+  @@map("userstoken")
 }
