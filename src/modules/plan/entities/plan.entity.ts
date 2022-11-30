@@ -17,6 +17,9 @@ export class PlanEntity implements Partial<Plan> {
   @ApiProperty()
   price: number;
 
+  @ApiProperty()
+  image: string;
+
   constructor(partial: Partial<Plan>) {
     Object.assign(this, partial);
   }
