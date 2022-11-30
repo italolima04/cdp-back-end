@@ -21,6 +21,14 @@ enum Gender {
   @@map("gender")
 }
 
+enum StatusPlan {
+  active   @map("ativo")
+  inactive @map("inativo")
+  deleted  @map("deletado")
+
+  @@map("status_plan")
+}
+
 model User {
   id            String         @id @default(uuid())
   firstName     String
@@ -87,13 +95,10 @@ model Plan {
   id           String         @id @default(uuid())
   title        String         @unique
   description  String
-  status       Boolean
-  planStripeId String
+  status       StatusPlan?    @default(active)
   price        Float
-  productId    String
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
-  product      Product        @relation(fields: [productId], references: [id])
   Subscription Subscription[]
 
   @@map("plan")
@@ -122,6 +127,7 @@ model Product {
   price       Float
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
   Plan        Plan[]
 
   @@map("product")
