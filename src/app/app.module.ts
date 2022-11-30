@@ -18,7 +18,9 @@ import { EnsureAuthenticatedMiddleware } from '@Middleware/middlewares';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ShipmentModule } from '@/shipment/shipment.module';
+import { ShipmentModule } from '@/modules/shipment/shipment.module';
+import { CouponModule } from '@/modules/coupon/coupon.module';
+import { OrderModule } from '@/modules/order/order.module';
 
 @Module({
   imports: [
@@ -32,6 +34,8 @@ import { ShipmentModule } from '@/shipment/shipment.module';
     ShipmentModule,
     MailerModule.forRoot(mailerConfig),
     AuthModule,
+    CouponModule,
+    OrderModule,
   ],
 
   controllers: [AppController],
@@ -60,6 +64,9 @@ export class AppModule implements NestModule {
         { path: '/api/v1/auth/verify-token/:token', method: RequestMethod.GET },
         { path: '/api/v1/auth/recover-password', method: RequestMethod.POST },
         { path: '/api/v1/auth/redefine-password', method: RequestMethod.POST },
+        { path: '/api/v1/coupon/create', method: RequestMethod.POST },
+        { path: '/api/v1/order/create', method: RequestMethod.POST },
+        { path: '/api/v1/coupon/verify/:titleCode', method: RequestMethod.GET },
       )
       .forRoutes('*');
   }
