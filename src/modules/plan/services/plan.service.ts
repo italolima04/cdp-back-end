@@ -25,6 +25,11 @@ export class PlanService {
   async findAll(): Promise<PlanEntity[]> {
     const verifyPlans = await this.prismaService.plan.findMany();
 
+    verifyPlans.forEach(
+      (verifyPlan) =>
+        (verifyPlan.image = `${process.env.URL_FILES_AVATAR}${verifyPlan.image}`),
+    );
+
     return verifyPlans.map((plan) => new PlanEntity(plan));
   }
 
@@ -37,6 +42,8 @@ export class PlanService {
       throw new BadRequestException(
         'Plano não encontrado, favor tente outro id',
       );
+
+    verifyPlan.image = `${process.env.URL_FILES_AVATAR}${verifyPlan.image}`;
 
     return new PlanEntity(verifyPlan);
   }
