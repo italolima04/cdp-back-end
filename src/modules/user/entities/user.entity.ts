@@ -58,44 +58,8 @@ class User implements Partial<Users> {
   @ApiProperty()
   updatedAt: Date;
 
-  constructor({
-    id,
-    firstName,
-    lastName,
-    email,
-    cpf,
-    phone,
-    password,
-    birthdate,
-    gender,
-    avatar,
-    street,
-    city,
-    neighbourhood,
-    zipcode,
-    state,
-    country,
-    createdAt,
-    updatedAt,
-  }: Partial<User>) {
-    this.id = id;
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.email = email;
-    this.cpf = cpf;
-    this.phone = phone;
-    this.password = password;
-    this.birthdate = birthdate;
-    this.gender = gender;
-    this.avatar = avatar;
-    this.street = street;
-    this.city = city;
-    this.neighbourhood = neighbourhood;
-    this.zipcode = zipcode;
-    this.state = state;
-    this.country = country;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
+  constructor(partial: Partial<User>) {
+    Object.assign(this, partial);
   }
 }
 

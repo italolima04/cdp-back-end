@@ -151,7 +151,7 @@ class UserController {
   })
   async updateAvatar(
     @UserDecorator() user: User,
-    @UploadedFile() avatar,
+    @UploadedFile() avatar: Express.Multer.File,
   ): Promise<User> {
     return await this.userService.updateAvatar({
       id: user.id,

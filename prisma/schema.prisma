@@ -2,7 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native"]
 }
 
 datasource db {
@@ -16,6 +17,8 @@ enum Gender {
   notBinary @map("Não Binário")
   others    @map("Outros")
   notInform @map("Prefiro Não Informar")
+
+  @@map("gender")
 }
 
 enum StatusPlan {
@@ -46,6 +49,9 @@ model User {
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
   Subscription  Subscription[]
+  UsersToken    UsersToken[]
+
+  @@map("user")
 }
 
 model Manager {
@@ -67,6 +73,8 @@ model Manager {
   status        Boolean
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+
+  @@map("manager")
 }
 
 model WaitList {
@@ -79,6 +87,8 @@ model WaitList {
   receiveUpdates Boolean
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+
+  @@map("waitlist")
 }
 
 model Plan {
@@ -90,6 +100,24 @@ model Plan {
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
   Subscription Subscription[]
+
+  @@map("plan")
+}
+
+model Address {
+  id            String         @id @default(uuid())
+  street        String
+  neighbourhood String
+  city          String
+  zipcode       String
+  state         String
+  country       String
+  complement    String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  Subscription  Subscription[]
+
+  @@map("address")
 }
 
 model Product {
@@ -100,7 +128,24 @@ model Product {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
+  Plan        Plan[]
+
   @@map("product")
+}
+
+model Coupon {
+  id          String    @id @default(uuid())
+  title       String
+  description String
+  benefit     String?
+  discount    Float?
+  isPermanent Boolean
+  initialDate DateTime?
+  expiredDate DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@map("coupon")
 }
 
 model Subscription {
@@ -109,8 +154,27 @@ model Subscription {
   userId         String
   status         Boolean
   paymentMethods String
+  addressId      String
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
   plan           Plan     @relation(fields: [planId], references: [id])
   user           User     @relation(fields: [userId], references: [id])
+  address        Address  @relation(fields: [addressId], references: [id])
+
+  @@map("subscription")
+}
+
+model UsersToken {
+  id         String    @id @default(uuid())
+  token      String    @default(uuid())
+  used       Boolean   @default(false)
+  used_in    DateTime?
+  expires_in DateTime?
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+
+  users_id String
+  user     User   @relation(fields: [users_id], references: [id])
+
+  @@map("userstoken")
 }
