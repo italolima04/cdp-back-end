@@ -100,7 +100,7 @@ model Plan {
 }
 
 model Address {
-  id            String         @id @default(uuid())
+  id            String   @id @default(uuid())
   street        String
   neighbourhood String
   city          String
@@ -108,9 +108,9 @@ model Address {
   state         String
   country       String
   complement    String?
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-  Subscription  Subscription[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  Order         Order[]
 
   @@map("address")
 }
@@ -129,7 +129,7 @@ model Product {
 
 model Coupon {
   id          String    @id @default(uuid())
-  title       String
+  titleCode   String    @unique
   description String
   benefit     String?
   discount    Float?
@@ -138,24 +138,41 @@ model Coupon {
   expiredDate DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+  Order       Order?
 
   @@map("coupon")
 }
 
 model Subscription {
-  id             String   @id @default(uuid())
-  planId         String   @unique
-  userId         String
-  status         Boolean
-  paymentMethods String
-  addressId      String
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-  plan           Plan     @relation(fields: [planId], references: [id])
-  user           User     @relation(fields: [userId], references: [id])
-  address        Address  @relation(fields: [addressId], references: [id])
+  id        String   @id @default(uuid())
+  planId    String   @unique
+  userId    String
+  isActive  Boolean
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  plan      Plan     @relation(fields: [planId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+  Order     Order?
 
   @@map("subscription")
+}
+
+model Order {
+  id               String       @id @default(uuid())
+  subscriptionId   String       @unique
+  addressId        String
+  couponId         String?      @unique
+  receiverEmail    String?
+  receiverCPF      String?
+  receiverPhone    String?
+  receiverFullName String?
+  subscription     Subscription @relation(fields: [subscriptionId], references: [id])
+  address          Address      @relation(fields: [addressId], references: [id])
+  coupon           Coupon?      @relation(fields: [couponId], references: [id])
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  @@map("order")
 }
 
 model UsersToken {

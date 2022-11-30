@@ -1,4 +1,4 @@
-import { Public } from '@/modules/auth/decorators/public.decorator';
+import { Public } from '@/modules/public.decorator';
 import {
   Controller,
   Get,
