@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { CreateCouponDTO } from '../dtos/create-coupon.dto';
 import { CouponService } from '../services/coupon.service';
@@ -19,15 +20,10 @@ export class CouponController {
     return this.couponService.create(createCouponDTO);
   }
 
-  // @Get()
-  // findAll() {
-  //   return this.couponService.findAll();
-  // }
-
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.couponService.findOne(+id);
-  // }
+  @Get('/verify/:titleCode')
+  verifyCoupon(@Param('titleCode') titleCode: string) {
+    return this.couponService.verifyCoupon(titleCode);
+  }
 
   // @Patch(':id')
   // update(@Param('id') id: string, @Body() updateCouponDto: UpdateCouponDto) {

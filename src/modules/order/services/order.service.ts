@@ -1,4 +1,5 @@
-import { PrismaService } from '@/modules/prisma';
+import { CouponService } from '@/modules/coupon/services/coupon.service';
+import { Coupon, Plan, PrismaService } from '@/modules/prisma';
 import {
   BadRequestException,
   HttpStatus,
@@ -9,7 +10,10 @@ import { CreateOrderDTO } from '../dtos/create-order.dto';
 
 @Injectable()
 export class OrderService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private couponService: CouponService,
+  ) {}
   async create(loggedUserId: string, createOrderDTO: CreateOrderDTO) {
     const {
       planId,
@@ -24,38 +28,32 @@ export class OrderService {
       neighbourhood,
       zipcode,
       complement,
-      titleCode,
+      couponId,
+      deliveryTime,
     } = createOrderDTO;
 
     const planExists = await this.prisma
-      .$queryRaw`SELECT * FROM public.plan WHERE id = ${planId}`;
+      .$queryRaw<Plan>`SELECT * FROM public.plan WHERE id = ${planId}`;
 
     if (!planExists) {
       throw new NotFoundException('Plano não encontrado.');
     }
 
-    const emailIsOfCurrentUser = await this.prisma
-      .$queryRaw`SELECT * FROM public."user" WHERE email = ${email}`;
-
-    if (!emailIsOfCurrentUser) {
-      throw new NotFoundException(
-        'O email informado não perrtence ao usuário logado.',
-      );
+    let couponExists: Coupon = null;
+    if (couponId) {
+      couponExists = await this.prisma
+        .$queryRaw<Coupon>`SELECT * FROM public."coupon" WHERE id = ${couponId}`;
     }
 
-    const currentDate = new Date();
+    let valueOfOrder = 0;
+    let taxDelivery = createOrderDTO.taxDelivery;
 
-    const validCoupon = await this.prisma.coupon.findFirst({
-      where: {
-        titleCode,
-        initialDate: {
-          lte: currentDate,
-        },
-        expiredDate: {
-          gte: currentDate,
-        },
-      },
-    });
+    if (couponExists.titleCode === 'FRETEGRATIS') {
+      taxDelivery = 0;
+      valueOfOrder = planExists.price;
+    }
+
+    valueOfOrder = planExists.price + taxDelivery - couponExists.discount;
 
     const createdOrder = await this.prisma.order.create({
       data: {
@@ -87,13 +85,16 @@ export class OrderService {
         },
         coupon: {
           connect: {
-            id: validCoupon ? validCoupon.id : undefined,
+            id: couponExists ? couponExists.id : undefined,
           },
         },
         receiverEmail: email,
         receiverCPF: cpf,
         receiverFullName: fullName,
         receiverPhone: phone,
+        deliveryTime,
+        taxDelivery,
+        totalPrice: valueOfOrder,
       },
     });
 

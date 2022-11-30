@@ -162,10 +162,13 @@ model Order {
   subscriptionId   String       @unique
   addressId        String
   couponId         String?      @unique
-  receiverEmail    String?
-  receiverCPF      String?
-  receiverPhone    String?
-  receiverFullName String?
+  receiverEmail    String
+  receiverCPF      String
+  receiverPhone    String
+  receiverFullName String
+  deliveryTime     DateTime?
+  taxDelivery      Float?
+  totalPrice       Float?
   subscription     Subscription @relation(fields: [subscriptionId], references: [id])
   address          Address      @relation(fields: [addressId], references: [id])
   coupon           Coupon?      @relation(fields: [couponId], references: [id])

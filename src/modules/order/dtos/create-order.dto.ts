@@ -64,8 +64,20 @@ export class CreateOrderDTO {
 
   @ApiProperty()
   @IsOptional()
+  taxDelivery?: number;
+
+  @ApiProperty()
+  @IsOptional()
+  totalPrice?: number;
+
+  @ApiProperty()
+  @IsOptional()
   @IsString()
-  titleCode?: string;
+  couponId?: string;
+
+  @ApiProperty()
+  @IsOptional()
+  deliveryTime?: Date;
 
   @IsEmpty()
   createdAt: Date;

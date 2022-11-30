@@ -1,5 +1,6 @@
 import { PrismaService } from '@/modules/prisma';
 import { BadRequestException, HttpStatus, Injectable } from '@nestjs/common';
+import { subDays } from 'date-fns';
 import { CreateCouponDTO } from '../dtos/create-coupon.dto';
 
 @Injectable()
@@ -22,6 +23,46 @@ export class CouponService {
       data: createdCoupon,
       status: HttpStatus.OK,
       message: 'Coupon created successfully',
+    };
+  }
+
+  async verifyCoupon(titleCode: string) {
+    //const currentDate = new Date();
+
+    const coupon = await this.prisma.coupon.findUnique({
+      where: {
+        titleCode: titleCode,
+      },
+    });
+
+    // if (coupon && coupon.isPermanent) {
+    //   if (coupon.initialDate && subDays(currentDate, coupon.initialDate) >= 0) {
+    //     console.log('aqui');
+
+    //     validCoupon = true;
+    //   } else {
+    //     validCoupon = false;
+    //   }
+    // } else {
+    //   if (
+    //     coupon.initialDate &&
+    //     coupon.expiredDate &&
+    //     coupon.expiredDate >= currentDate
+    //   ) {
+    //     validCoupon = true;
+    //   } else {
+    //     validCoupon = false;
+    //   }
+    // }
+
+    if (!coupon) {
+      throw new BadRequestException('Erro. Cumpom inválido.');
+    }
+
+    return {
+      data: coupon,
+      status: HttpStatus.OK,
+      message: 'Valid coupon returned',
     };
   }
   // findAll() {
