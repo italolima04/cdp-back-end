@@ -7,10 +7,15 @@ import { PlanEntity } from '../entities/plan.entity';
 @Injectable()
 export class PlanService {
   constructor(private prismaService: PrismaService) {}
-  async createProduct(createPlanDto: CreatePlanDto): Promise<CreatePlanDto> {
+  async createProduct(
+    createPlanDto: CreatePlanDto,
+    image: string,
+  ): Promise<CreatePlanDto> {
     const newPlan = await this.prismaService.plan.create({
       data: {
         ...createPlanDto,
+        price: Number(createPlanDto.price),
+        image: image,
       },
     });
 

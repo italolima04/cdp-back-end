@@ -1,5 +1,11 @@
 import { StatusPlan } from '@prisma/client';
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsNumberString,
+  IsString,
+} from 'class-validator';
 
 export class CreatePlanDto {
   @IsString()
@@ -14,7 +20,7 @@ export class CreatePlanDto {
   @IsNotEmpty()
   description: string;
 
-  @IsNumber()
+  @IsString()
   @IsNotEmpty()
   price: number;
 }

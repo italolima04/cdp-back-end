@@ -57,9 +57,7 @@ export class AppModule implements NestModule {
           path: '/api/v1/shipment/track/:trackingCode',
           method: RequestMethod.GET,
         },
-          path: '/api/v1/auth/verify-token/:token',
-          method: RequestMethod.GET,
-        },
+        { path: '/api/v1/auth/verify-token/:token', method: RequestMethod.GET },
         { path: '/api/v1/auth/recover-password', method: RequestMethod.POST },
         { path: '/api/v1/auth/redefine-password', method: RequestMethod.POST },
       )

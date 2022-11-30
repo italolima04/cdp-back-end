@@ -97,9 +97,11 @@ model Plan {
   description  String
   status       StatusPlan?    @default(active)
   price        Float
+  image        String?
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
   Subscription Subscription[]
+  Products     Product[]
 
   @@map("plan")
 }
@@ -127,7 +129,6 @@ model Product {
   price       Float
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-
   Plan        Plan[]
 
   @@map("product")
