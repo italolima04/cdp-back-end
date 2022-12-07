@@ -19,7 +19,6 @@ export class SubscriptionService {
     const mySubscriptions = await this.prisma.subscription.findMany({
       where: {
         userId,
-        isActive: isActive,
         plan: {
           status: planActive,
         },
