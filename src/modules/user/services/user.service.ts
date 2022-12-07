@@ -209,6 +209,9 @@ class UserService {
       orderBy: {
         createdAt: 'desc',
       },
+      include: {
+        Subscription: true,
+      },
     });
 
     if (!currentPlan) {
