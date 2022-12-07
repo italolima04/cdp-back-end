@@ -150,7 +150,6 @@ class UserController {
   @ApiInternalServerErrorResponse({
     description: 'Erro interno no servidor.',
   })
-  @Get('update/address')
   async updateAvatar(
     @UserDecorator() user: User,
     @UploadedFile() avatar: Express.Multer.File,

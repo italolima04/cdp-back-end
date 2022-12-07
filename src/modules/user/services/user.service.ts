@@ -17,10 +17,14 @@ import User from '../entities/user.entity';
 import UpdateAvatarDto from '../dtos/update-avatar.dto';
 import MeUserDto from '../dtos/me-user.dto';
 import { UpdateAddressDTO } from '../dtos/update-address.dto';
+import CreateAddressDTO from '../dtos/create-address.dto';
 
 @Injectable()
 class UserService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private createAddressDTO: CreateAddressDTO,
+  ) {}
 
   async me({ id, avatar }: MeUserDto): Promise<User> {
     const user = await this.prisma.user.findUnique({ where: { id } });
@@ -168,6 +172,16 @@ class UserService {
       status: HttpStatus.OK,
       message: 'Endereços do usuário listados com sucesso',
     };
+  }
+
+  async createAddress(userId: string, createAddressDTO: CreateAddressDTO) {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+
+    if (!user) throw new BadRequestException('Usuário não encontrado');
+
+    const updatedAddress = await this.prisma.user.create({
+      data: {},
+    });
   }
 
   async updateAddress(
