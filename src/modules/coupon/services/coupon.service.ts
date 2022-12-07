@@ -7,11 +7,13 @@ import { CreateCouponDTO } from '../dtos/create-coupon.dto';
 export class CouponService {
   constructor(private prisma: PrismaService) {}
   async create(createCouponDTO: CreateCouponDTO) {
-    const { expiredDate } = createCouponDTO;
+    const { initialDate, expiredDate } = createCouponDTO;
     const createdCoupon = await this.prisma.coupon.create({
       data: {
         ...createCouponDTO,
         isPermanent: expiredDate ? false : true,
+        initialDate: initialDate ? new Date(initialDate) : undefined,
+        expiredDate: expiredDate ? new Date(expiredDate) : undefined,
       },
     });
 
@@ -39,26 +41,23 @@ export class CouponService {
       throw new BadRequestException('Erro. Cumpom inválido.');
     }
 
-    let validCoupon = false;
+    let validCoupon = true;
 
-    if (coupon && coupon.isPermanent) {
-      //console.log(subDays(currentDate, coupon.initialDate));
-      // if (coupon.initialDate && subDays(currentDate, coupon.initialDate) >= 0) {
-      //   console.log('aqui');
-      //   validCoupon = true;
-      // } else {
-      //   validCoupon = false;
-      // }
+    if (coupon && !coupon.isPermanent) {
+      if (coupon.initialDate && currentDate >= coupon.initialDate) {
+        if (coupon.expiredDate && currentDate <= coupon.expiredDate)
+          validCoupon = true;
+        else if (!coupon.expiredDate) validCoupon = true;
+        else validCoupon = false;
+      } else {
+        validCoupon = false;
+      }
     } else {
-      // if (
-      //   coupon.initialDate &&
-      //   coupon.expiredDate &&
-      //   coupon.expiredDate >= currentDate
-      // ) {
-      //   validCoupon = true;
-      // } else {
-      //   validCoupon = false;
-      // }
+      validCoupon = false;
+    }
+
+    if (!validCoupon) {
+      throw new BadRequestException('Erro. Cumpom expirado ou não disponível.');
     }
 
     return {
