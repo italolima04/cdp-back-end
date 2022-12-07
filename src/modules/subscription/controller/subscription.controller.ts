@@ -1,43 +1,38 @@
+import { UserDecorator } from '@/decorators/user.decorator';
+import User from '@/modules/user/entities/user.entity';
 import {
   Controller,
   Get,
-  Post,
-  Body,
-  Patch,
   Param,
-  Delete,
+  Query,
+  DefaultValuePipe,
+  ParseBoolPipe,
+  Put,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { SubscriptionService } from '../services/subscription.service';
 
+@ApiTags('subscription')
 @Controller('subscription')
 export class SubscriptionController {
   constructor(private readonly subscriptionService: SubscriptionService) {}
 
-  // @Post()
-  // create(@Body() createSubscriptionDto: CreateSubscriptionDto) {
-  //   return this.subscriptionService.create(createSubscriptionDto);
-  // }
+  @Get()
+  findAll(
+    @UserDecorator() user: User,
+    @Query('isActive', new DefaultValuePipe(true), ParseBoolPipe)
+    isActive = true,
+    @Query('planActive', new DefaultValuePipe(true), ParseBoolPipe)
+    planActive = true,
+  ) {
+    return this.subscriptionService.getMySubscriptions(user.id, {
+      isActive,
+      planActive,
+    });
+  }
 
-  // @Get()
-  // findAll() {
-  //   return this.subscriptionService.findAll();
-  // }
-
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.subscriptionService.findOne(+id);
-  // }
-
-  // @Patch(':id')
-  // update(
-  //   @Param('id') id: string,
-  //   @Body() updateSubscriptionDto: UpdateSubscriptionDto,
-  // ) {
-  //   return this.subscriptionService.update(+id, updateSubscriptionDto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.subscriptionService.remove(+id);
-  // }
+  @Put('disable/:id')
+  disableSubscription(@Param('id') id: string) {
+    return this.subscriptionService.disableMySubscription(id);
+  }
 }

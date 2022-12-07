@@ -16,6 +16,7 @@ export class PlanService {
         ...createPlanDto,
         price: Number(createPlanDto.price),
         image: image,
+        status: 'true' ? true : false,
       },
     });
 

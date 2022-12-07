@@ -1,4 +1,9 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../../prisma';
 import { SearchSubscriptionDTO } from '../dtos/search-subscriptions.dto';
 
@@ -10,12 +15,13 @@ export class SubscriptionService {
     searchSubscriptionDTO: SearchSubscriptionDTO,
   ) {
     const { isActive, planActive } = searchSubscriptionDTO;
+
     const mySubscriptions = await this.prisma.subscription.findMany({
       where: {
         userId,
-        isActive: isActive ? isActive : undefined,
+        isActive: isActive,
         plan: {
-          status: planActive ? planActive : undefined,
+          status: planActive,
         },
       },
       select: {
@@ -43,21 +49,29 @@ export class SubscriptionService {
       message: 'Subscriptions returned successfully',
     };
   }
-  // create(createSubscriptionDto: CreateSubscriptionDto) {}
 
-  // findAll() {
-  //   return `This action returns all subscription`;
-  // }
+  async disableMySubscription(id: string) {
+    const existsSubscription = await this.prisma.subscription.findFirst({
+      where: { id },
+    });
 
-  // findOne(id: number) {
-  //   return `This action returns a #${id} subscription`;
-  // }
+    if (!existsSubscription) {
+      throw new NotFoundException('Subscription does not found');
+    }
 
-  // update(id: number, updateSubscriptionDto: UpdateSubscriptionDto) {
-  //   return `This action updates a #${id} subscription`;
-  // }
+    if (!existsSubscription.isActive) {
+      throw new ConflictException(`This subscription it's already desable`);
+    }
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} subscription`;
-  // }
+    const disabledSubscription = await this.prisma.subscription.update({
+      where: { id },
+      data: { isActive: false },
+    });
+
+    return {
+      data: disabledSubscription,
+      status: HttpStatus.OK,
+      message: 'Subscription disabled successfully',
+    };
+  }
 }

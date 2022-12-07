@@ -1,10 +1,4 @@
-import { Type } from 'class-transformer';
-import {
-  IsNotEmpty,
-  IsNumber,
-  IsNumberString,
-  IsString,
-} from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreatePlanDto {
   @IsString()
