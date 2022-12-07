@@ -65,9 +65,7 @@ export class AppModule implements NestModule {
         { path: '/api/v1/auth/recover-password', method: RequestMethod.POST },
         { path: '/api/v1/auth/redefine-password', method: RequestMethod.POST },
         { path: '/api/v1/coupon/create', method: RequestMethod.POST },
-        { path: '/api/v1/order/create', method: RequestMethod.POST },
         { path: '/api/v1/coupon/verify/:titleCode', method: RequestMethod.GET },
-        { path: '/api/v1/user/address/', method: RequestMethod.GET },
       )
       .forRoutes('*');
   }
