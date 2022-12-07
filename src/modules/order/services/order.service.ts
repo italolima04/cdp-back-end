@@ -34,13 +34,6 @@ export class OrderService {
       deliveryTime,
     } = createOrderDTO;
 
-    console.log(
-      await this.userService.me({
-        id: '74678e35-1622-4940-8d91-0e17feb3d1c5',
-        avatar: false,
-      }),
-    );
-
     const planExists = await this.prisma.plan.findUnique({
       where: {
         id: planId,

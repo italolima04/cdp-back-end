@@ -18,10 +18,7 @@ export class OrderController {
 
   @Post('/create')
   create(@UserDecorator() user: User, @Body() createOrderDTO: CreateOrderDTO) {
-    return this.orderService.create(
-      '74678e35-1622-4940-8d91-0e17feb3d1c5',
-      createOrderDTO,
-    );
+    return this.orderService.create(user.id, createOrderDTO);
   }
 
   // @Get()
