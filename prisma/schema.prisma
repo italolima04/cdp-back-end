@@ -71,15 +71,15 @@ model WaitList {
 }
 
 model Plan {
-  id           String        @id @default(uuid())
-  title        String        @unique
+  id           String         @id @default(uuid())
+  title        String         @unique
   description  String
   image        String?
   price        Float
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  status       Boolean?      @default(true)
-  Subscription Subscription?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  status       Boolean?       @default(true)
+  Subscription Subscription[]
 
   @@map("plan")
 }
@@ -122,28 +122,28 @@ model Coupon {
   expiredDate DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-  Order       Order?
+  Order       Order[]
 
   @@map("coupon")
 }
 
 model Subscription {
   id        String   @id @default(uuid())
-  planId    String   @unique
+  planId    String
   userId    String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   isActive  Boolean
   plan      Plan     @relation(fields: [planId], references: [id])
   user      User     @relation(fields: [userId], references: [id])
-  Order     Order?
+  Order     Order[]
 
   @@map("subscription")
 }
 
 model Order {
   id               String       @id @default(uuid())
-  subscriptionId   String       @unique
+  subscriptionId   String
   addressId        String
   couponId         String?      @unique
   receiverEmail    String

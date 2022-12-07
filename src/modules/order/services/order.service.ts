@@ -1,5 +1,6 @@
 import { CouponService } from '@/modules/coupon/services/coupon.service';
-import { Coupon, Plan, PrismaService } from '@/modules/prisma';
+import { Coupon, Order, Plan, PrismaService } from '@/modules/prisma';
+import UserService from '@/modules/user/services/user.service';
 import {
   BadRequestException,
   HttpStatus,
@@ -13,6 +14,7 @@ export class OrderService {
   constructor(
     private prisma: PrismaService,
     private couponService: CouponService,
+    private userService: UserService,
   ) {}
   async create(loggedUserId: string, createOrderDTO: CreateOrderDTO) {
     const {
@@ -32,8 +34,18 @@ export class OrderService {
       deliveryTime,
     } = createOrderDTO;
 
-    const planExists = await this.prisma
-      .$queryRaw<Plan>`SELECT * FROM public.plan WHERE id = ${planId}`;
+    console.log(
+      await this.userService.me({
+        id: '74678e35-1622-4940-8d91-0e17feb3d1c5',
+        avatar: false,
+      }),
+    );
+
+    const planExists = await this.prisma.plan.findUnique({
+      where: {
+        id: planId,
+      },
+    });
 
     if (!planExists) {
       throw new NotFoundException('Plano não encontrado.');
@@ -41,62 +53,105 @@ export class OrderService {
 
     let couponExists: Coupon = null;
     if (couponId) {
-      couponExists = await this.prisma
-        .$queryRaw<Coupon>`SELECT * FROM public."coupon" WHERE id = ${couponId}`;
+      couponExists = await this.prisma.coupon.findUnique({
+        where: {
+          id: couponId,
+        },
+      });
     }
 
     let valueOfOrder = 0;
     let taxDelivery = createOrderDTO.taxDelivery;
 
-    if (couponExists.titleCode === 'FRETEGRATIS') {
+    if (couponExists?.titleCode === 'FRETEGRATIS') {
       taxDelivery = 0;
       valueOfOrder = planExists.price;
     }
 
-    valueOfOrder = planExists.price + taxDelivery - couponExists.discount;
-
-    const createdOrder = await this.prisma.order.create({
-      data: {
-        subscription: {
-          create: {
-            isActive: true,
-            plan: {
-              connect: {
-                id: planId,
+    valueOfOrder = planExists.price + taxDelivery - couponExists?.discount;
+    let createdOrder: Order;
+    if (couponExists) {
+      createdOrder = await this.prisma.order.create({
+        data: {
+          subscription: {
+            create: {
+              isActive: true,
+              plan: {
+                connect: {
+                  id: planId,
+                },
+              },
+              user: {
+                connect: {
+                  id: loggedUserId,
+                },
               },
             },
-            user: {
-              connect: {
-                id: loggedUserId,
+          },
+          address: {
+            create: {
+              city,
+              state,
+              country,
+              street,
+              neighbourhood,
+              zipcode,
+              complement: complement ? complement : undefined,
+            },
+          },
+          coupon: couponExists && {
+            connect: {
+              id: couponExists.id,
+            },
+          },
+          receiverEmail: email,
+          receiverCPF: cpf,
+          receiverFullName: fullName,
+          receiverPhone: phone,
+          deliveryTime,
+          taxDelivery,
+          totalPrice: valueOfOrder,
+        },
+      });
+    } else {
+      createdOrder = await this.prisma.order.create({
+        data: {
+          subscription: {
+            create: {
+              isActive: true,
+              plan: {
+                connect: {
+                  id: planId,
+                },
+              },
+              user: {
+                connect: {
+                  id: loggedUserId,
+                },
               },
             },
           },
-        },
-        address: {
-          create: {
-            city,
-            state,
-            country,
-            street,
-            neighbourhood,
-            zipcode,
-            complement: complement ? complement : undefined,
+          address: {
+            create: {
+              city,
+              state,
+              country,
+              street,
+              neighbourhood,
+              zipcode,
+              complement: complement ? complement : undefined,
+            },
           },
+          receiverEmail: email,
+          receiverCPF: cpf,
+          receiverFullName: fullName,
+          receiverPhone: phone,
+          deliveryTime,
+          taxDelivery,
+          totalPrice: valueOfOrder,
         },
-        coupon: {
-          connect: {
-            id: couponExists ? couponExists.id : undefined,
-          },
-        },
-        receiverEmail: email,
-        receiverCPF: cpf,
-        receiverFullName: fullName,
-        receiverPhone: phone,
-        deliveryTime,
-        taxDelivery,
-        totalPrice: valueOfOrder,
-      },
-    });
+      });
+    }
 
     if (!createdOrder) {
       throw new BadRequestException('Erro ao realizar pedido.');
