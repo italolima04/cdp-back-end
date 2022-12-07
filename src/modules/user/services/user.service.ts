@@ -187,6 +187,44 @@ class UserService {
 
     return new User({ ...updatedAddress });
   }
+
+  async getCurrentPlanOfUser(userId: string) {
+    const userExists = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!userExists)
+      throw new NotFoundException('Erro. Usuário não encontrado.');
+
+    const currentPlan = await this.prisma.plan.findFirst({
+      where: {
+        Subscription: {
+          some: {
+            isActive: true,
+            userId,
+          },
+        },
+      },
+      take: 1,
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+
+    if (!currentPlan) {
+      return {
+        data: {},
+        status: HttpStatus.OK,
+        message: 'O usuário não possui plano ativo.',
+      };
+    }
+
+    return {
+      data: currentPlan,
+      status: HttpStatus.OK,
+      message: 'Plano retornado com sucesso.',
+    };
+  }
 }
 
 export default UserService;

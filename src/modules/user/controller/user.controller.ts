@@ -188,6 +188,11 @@ class UserController {
   ) {
     return await this.userService.updateAddress(user.id, updateAddressDTO);
   }
+
+  @Get('/plan')
+  async getCurrentPlanOfUser(@UserDecorator() user: User) {
+    return await this.userService.getCurrentPlanOfUser(user.id);
+  }
 }
 
 export default UserController;
