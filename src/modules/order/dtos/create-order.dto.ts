@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { FormOfPayment } from '@prisma/client';
 import { IsEmpty, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateOrderDTO {
@@ -78,6 +79,10 @@ export class CreateOrderDTO {
   @ApiProperty()
   @IsOptional()
   deliveryTime?: Date;
+
+  @ApiProperty()
+  @IsOptional()
+  formOfPayment: FormOfPayment;
 
   @IsEmpty()
   createdAt: Date;
