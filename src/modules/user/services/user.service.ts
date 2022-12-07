@@ -143,6 +143,30 @@ class UserService {
 
     return new User({ ...updatedUserAvatar });
   }
+
+  async findAddressesByUser(userId: string) {
+    const addressOfUser = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        country: true,
+        state: true,
+        city: true,
+        street: true,
+        zipcode: true,
+        neighbourhood: true,
+      },
+    });
+
+    if (!addressOfUser) {
+      throw new NotFoundException('Erro. Usuário não encontrado.');
+    }
+
+    return {
+      data: addressOfUser,
+      status: HttpStatus.OK,
+      message: 'Endereços do usuário listados com sucesso',
+    };
+  }
 }
 
 export default UserService;

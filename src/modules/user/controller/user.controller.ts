@@ -158,6 +158,11 @@ class UserController {
       avatar: avatar.filename,
     });
   }
+
+  @Get('address')
+  async getAddressesOfUser(@UserDecorator() user: User) {
+    return await this.userService.findAddressesByUser(user.id);
+  }
 }
 
 export default UserController;
