@@ -32,6 +32,7 @@ import UserService from '../services/user.service';
 import CreateUserDto from '../dtos/create-user.dto';
 import UpdateUserDto from '../dtos/update-user.dto';
 import User from '../entities/user.entity';
+import { UpdateAddressDTO } from '../dtos/update-address.dto';
 
 @ApiTags('user')
 @Controller('user')
@@ -177,6 +178,16 @@ class UserController {
   @Get('address')
   async getAddressesOfUser(@UserDecorator() user: User) {
     return await this.userService.findAddressesByUser(user.id);
+  }
+
+  @Patch('/address')
+  @UsePipes(ValidationPipe)
+  @UseInterceptors(ClassSerializerInterceptor)
+  async updateAddress(
+    @Body() updateAddressDTO: UpdateAddressDTO,
+    @UserDecorator() user: User,
+  ) {
+    return await this.userService.updateAddress(user.id, updateAddressDTO);
   }
 }
 

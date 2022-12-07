@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   HttpStatus,
   Injectable,
@@ -15,6 +16,7 @@ import UpdateUserDto from '../dtos/update-user.dto';
 import User from '../entities/user.entity';
 import UpdateAvatarDto from '../dtos/update-avatar.dto';
 import MeUserDto from '../dtos/me-user.dto';
+import { UpdateAddressDTO } from '../dtos/update-address.dto';
 
 @Injectable()
 class UserService {
@@ -166,6 +168,24 @@ class UserService {
       status: HttpStatus.OK,
       message: 'Endereços do usuário listados com sucesso',
     };
+  }
+
+  async updateAddress(
+    id: string,
+    updateAddressDTO: UpdateAddressDTO,
+  ): Promise<User> {
+    const user = await this.prisma.user.findFirst({ where: { id } });
+
+    if (!user) throw new BadRequestException('Usuário não encontrado');
+
+    const updatedAddress = await this.prisma.user.update({
+      where: { id },
+      data: {
+        ...updateAddressDTO,
+      },
+    });
+
+    return new User({ ...updatedAddress });
   }
 }
 
