@@ -34,6 +34,8 @@ export class AuthService {
       );
     }
 
+    console.log('usuário encontrado');
+
     const verifyUserPassword = await compare(password, user.password);
 
     if (!verifyUserPassword) {

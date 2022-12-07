@@ -18,6 +18,9 @@ export function EnsureAuthenticatedMiddleware(
   next: NextFunction,
 ) {
   const authHeader = req.headers.authorization;
+
+  console.log('chama aqui? ', authHeader);
+
   if (!authHeader) {
     throw new UnauthorizedException('JWT token está faltando');
   }
