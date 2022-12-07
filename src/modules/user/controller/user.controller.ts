@@ -149,6 +149,7 @@ class UserController {
   @ApiInternalServerErrorResponse({
     description: 'Erro interno no servidor.',
   })
+  @Get('update/address')
   async updateAvatar(
     @UserDecorator() user: User,
     @UploadedFile() avatar: Express.Multer.File,
@@ -159,6 +160,20 @@ class UserController {
     });
   }
 
+  @ApiOperation({
+    summary: 'Esta rota é responsável por atualizar o avatar de um usuário.',
+  })
+  @ApiOkResponse({
+    description:
+      'Retorna os dados do usuário atualizados com a imagem de perfil no avatar.',
+    type: User,
+  })
+  @ApiNotFoundResponse({
+    description: 'Usuário para atualização do avatar não encontrado.',
+  })
+  @ApiInternalServerErrorResponse({
+    description: 'Erro interno no servidor.',
+  })
   @Get('address')
   async getAddressesOfUser(@UserDecorator() user: User) {
     return await this.userService.findAddressesByUser(user.id);
