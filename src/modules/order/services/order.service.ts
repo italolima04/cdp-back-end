@@ -1,6 +1,7 @@
 import { CouponService } from '@/modules/coupon/services/coupon.service';
 import { Coupon, Order, Plan, PrismaService } from '@/modules/prisma';
 import UserService from '@/modules/user/services/user.service';
+import { MailerService } from '@nestjs-modules/mailer';
 import {
   BadRequestException,
   HttpStatus,
@@ -15,6 +16,7 @@ export class OrderService {
     private prisma: PrismaService,
     private couponService: CouponService,
     private userService: UserService,
+    private mailerService: MailerService,
   ) {}
   async create(loggedUserId: string, createOrderDTO: CreateOrderDTO) {
     const {
@@ -149,6 +151,20 @@ export class OrderService {
     if (!createdOrder) {
       throw new BadRequestException('Erro ao realizar pedido.');
     }
+
+    const mail = {
+      to: createdOrder.receiverEmail,
+      from: `${process.env.EMAIL}`,
+      subject: 'Pedido confirmado com sucesso! Trama is comming :)',
+      template: 'order-confirmed',
+      context: {
+        user: createdOrder.receiverFullName,
+        city: city,
+        state: state,
+      },
+    };
+
+    await this.mailerService.sendMail(mail);
 
     return {
       data: createdOrder,
