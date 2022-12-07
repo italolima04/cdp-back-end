@@ -27,7 +27,7 @@ export class CouponService {
   }
 
   async verifyCoupon(titleCode: string) {
-    //const currentDate = new Date();
+    const currentDate = new Date();
 
     const coupon = await this.prisma.coupon.findUnique({
       where: {
@@ -35,28 +35,30 @@ export class CouponService {
       },
     });
 
-    // if (coupon && coupon.isPermanent) {
-    //   if (coupon.initialDate && subDays(currentDate, coupon.initialDate) >= 0) {
-    //     console.log('aqui');
-
-    //     validCoupon = true;
-    //   } else {
-    //     validCoupon = false;
-    //   }
-    // } else {
-    //   if (
-    //     coupon.initialDate &&
-    //     coupon.expiredDate &&
-    //     coupon.expiredDate >= currentDate
-    //   ) {
-    //     validCoupon = true;
-    //   } else {
-    //     validCoupon = false;
-    //   }
-    // }
-
     if (!coupon) {
       throw new BadRequestException('Erro. Cumpom inválido.');
+    }
+
+    let validCoupon = false;
+
+    if (coupon && coupon.isPermanent) {
+      //console.log(subDays(currentDate, coupon.initialDate));
+      // if (coupon.initialDate && subDays(currentDate, coupon.initialDate) >= 0) {
+      //   console.log('aqui');
+      //   validCoupon = true;
+      // } else {
+      //   validCoupon = false;
+      // }
+    } else {
+      // if (
+      //   coupon.initialDate &&
+      //   coupon.expiredDate &&
+      //   coupon.expiredDate >= currentDate
+      // ) {
+      //   validCoupon = true;
+      // } else {
+      //   validCoupon = false;
+      // }
     }
 
     return {

@@ -74,10 +74,11 @@ model Plan {
   id           String        @id @default(uuid())
   title        String        @unique
   description  String
+  image        String?
   price        Float
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
-  status       StatusPlan?   @default(active)
+  status       Boolean?      @default(true)
   Subscription Subscription?
 
   @@map("plan")
@@ -183,12 +184,4 @@ enum Gender {
   notInform @map("Prefiro Não Informar")
 
   @@map("gender")
-}
-
-enum StatusPlan {
-  active   @map("ativo")
-  inactive @map("inativo")
-  deleted  @map("deletado")
-
-  @@map("status_plan")
 }

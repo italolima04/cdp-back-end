@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Plan, StatusPlan } from '@prisma/client';
+import { Plan } from '@prisma/client';
 
 export class PlanEntity implements Partial<Plan> {
   @ApiProperty()
@@ -9,7 +9,7 @@ export class PlanEntity implements Partial<Plan> {
   title: string;
 
   @ApiProperty()
-  status?: StatusPlan;
+  status?: boolean;
 
   @ApiProperty()
   description: string;

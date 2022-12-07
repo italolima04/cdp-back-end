@@ -1,4 +1,3 @@
-import { StatusPlan } from '@prisma/client';
 import { Type } from 'class-transformer';
 import {
   IsNotEmpty,
@@ -14,7 +13,7 @@ export class CreatePlanDto {
 
   @IsString()
   @IsNotEmpty()
-  status?: StatusPlan;
+  status?: boolean;
 
   @IsString()
   @IsNotEmpty()

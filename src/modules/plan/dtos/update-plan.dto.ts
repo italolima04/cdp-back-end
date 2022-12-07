@@ -1,4 +1,3 @@
-import { StatusPlan } from '@prisma/client';
 import {
   IsBoolean,
   IsNumber,
@@ -14,7 +13,7 @@ export class UpdatePlanDto {
 
   @IsOptional()
   @IsString()
-  status?: StatusPlan;
+  status?: boolean;
 
   @IsPositive()
   @IsString()
