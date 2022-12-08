@@ -17,6 +17,8 @@ import User from '../entities/user.entity';
 import UpdateAvatarDto from '../dtos/update-avatar.dto';
 import MeUserDto from '../dtos/me-user.dto';
 import { UpdateAddressDTO } from '../dtos/update-address.dto';
+import UpdatePasswordDTO from '../dtos/update-password.dto';
+import { compare } from 'bcryptjs';
 
 @Injectable()
 class UserService {
@@ -113,16 +115,33 @@ class UserService {
       }
     }
 
-    if (updateUserDto.password) {
-      updateUserDto.password = await hash(
-        updateUserDto.password,
-        parseInt(process.env.HASH_SALT),
-      );
+    const updatedUser = await this.prisma.user.update({
+      where: { id },
+      data: { ...updateUserDto },
+    });
+
+    return new User({ ...updatedUser });
+  }
+
+  async updatePassword(
+    id: string,
+    { lastPassword, password }: UpdatePasswordDTO,
+  ): Promise<User> {
+    const user = await this.prisma.user.findFirst({ where: { id } });
+
+    if (!user) {
+      throw new NotFoundException('Usuário não encontrado');
+    }
+
+    const verifyUserPassword = await compare(lastPassword, user.password);
+
+    if (!verifyUserPassword) {
+      throw new ConflictException('A senha atual invalida.');
     }
 
     const updatedUser = await this.prisma.user.update({
       where: { id },
-      data: { ...updateUserDto },
+      data: { password: await hash(password, parseInt(process.env.HASH_SALT)) },
     });
 
     return new User({ ...updatedUser });

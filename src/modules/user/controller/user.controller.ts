@@ -33,6 +33,7 @@ import CreateUserDto from '../dtos/create-user.dto';
 import UpdateUserDto from '../dtos/update-user.dto';
 import User from '../entities/user.entity';
 import { UpdateAddressDTO } from '../dtos/update-address.dto';
+import UpdatePasswordDTO from '../dtos/update-password.dto';
 
 @ApiTags('user')
 @Controller('user')
@@ -118,6 +119,18 @@ class UserController {
     @Body() updatedUser: UpdateUserDto,
   ): Promise<User> {
     return await this.userService.update(user.id, updatedUser);
+  }
+
+  @Patch('password')
+  @UsePipes(ValidationPipe)
+  @UseInterceptors(ClassSerializerInterceptor)
+  async updatePassword(
+    @UserDecorator() user: User,
+    @Body() updatePasswordDto: UpdatePasswordDTO,
+  ): Promise<User> {
+    return await this.userService.updatePassword(user.id, {
+      ...updatePasswordDto,
+    });
   }
 
   @Patch('avatar')

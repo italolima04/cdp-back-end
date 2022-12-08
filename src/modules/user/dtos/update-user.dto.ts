@@ -56,19 +56,6 @@ class UpdateUserDto implements Partial<CreateUserDto> {
   phone?: string;
 
   @IsString()
-  @MinLength(6)
-  @MaxLength(20)
-  @IsOptional()
-  @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
-    message:
-      'Sua senha deve ter pelo menos 6 caracteres (no mínimo 1 letra maiúscula, letras minúsculas, números e caracteres especiais).',
-  })
-  @ApiProperty({
-    example: 'Admin1234',
-  })
-  password?: string;
-
-  @IsString()
   @IsNotEmpty()
   @IsOptional()
   @ApiProperty({
