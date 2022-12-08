@@ -113,6 +113,13 @@ class UserService {
       }
     }
 
+    if (updateUserDto.password) {
+      updateUserDto.password = await hash(
+        updateUserDto.password,
+        parseInt(process.env.HASH_SALT),
+      );
+    }
+
     const updatedUser = await this.prisma.user.update({
       where: { id },
       data: { ...updateUserDto },
