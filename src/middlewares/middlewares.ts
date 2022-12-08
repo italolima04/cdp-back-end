@@ -17,16 +17,22 @@ export function EnsureAuthenticatedMiddleware(
   res: Response,
   next: NextFunction,
 ) {
-  const authHeader = req.headers.authorization;
+  try {
+    const authHeader = req.headers.authorization;
 
-  console.log('chama aqui? ', authHeader);
+    if (!authHeader) {
+      throw new UnauthorizedException('JWT token está faltando');
+    }
 
-  if (!authHeader) {
-    throw new UnauthorizedException('JWT token está faltando');
+    const [, token] = authHeader.split(' ');
+    const decoded = verify(token, jwt.secret);
+
+    const { id, firstName, lastName, email } = decoded as TokenPayload;
+
+    req.user = { id, firstName, lastName, email };
+
+    return next();
+  } catch (error) {
+    throw new UnauthorizedException('JWT token invalid');
   }
-  const [, token] = authHeader.split(' ');
-  const decoded = verify(token, jwt.secret);
-  const { id, firstName, lastName, email } = decoded as TokenPayload;
-  req.user = { id, firstName, lastName, email };
-  return next();
 }

@@ -46,6 +46,7 @@ export class AppModule implements NestModule {
     consumer
       .apply(EnsureAuthenticatedMiddleware)
       .exclude(
+        { path: '/files', method: RequestMethod.GET },
         { path: '/api/v1/user', method: RequestMethod.POST },
         { path: '/api/v1/auth', method: RequestMethod.POST },
         { path: '/api/v1/waitlist', method: RequestMethod.POST },
