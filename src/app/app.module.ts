@@ -50,6 +50,7 @@ export class AppModule implements NestModule {
         { path: '/api/v1/user', method: RequestMethod.POST },
         { path: '/api/v1/auth', method: RequestMethod.POST },
         { path: '/api/v1/waitlist', method: RequestMethod.POST },
+        { path: '/api/v1/plans', method: RequestMethod.GET },
         {
           path: '/api/v1/shipment/calculate/:zipCode',
           method: RequestMethod.GET,
