@@ -53,6 +53,12 @@ class User implements Partial<Users> {
   country: string;
 
   @ApiProperty()
+  number: string;
+
+  @ApiProperty()
+  complement: string;
+
+  @ApiProperty()
   createdAt: Date;
 
   @ApiProperty()

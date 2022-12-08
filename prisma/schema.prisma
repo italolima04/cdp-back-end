@@ -8,11 +8,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum FormOfPayment {
-  creditCard @map("Cartão de crédito")
-  billet     @map("Boleto")
-}
-
 model User {
   id            String         @id @default(uuid())
   firstName     String
@@ -30,6 +25,8 @@ model User {
   zipcode       String
   state         String
   country       String
+  number        String         @default("1")
+  complement    String?
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
   Subscription  Subscription[]
@@ -79,10 +76,10 @@ model Plan {
   id           String         @id @default(uuid())
   title        String         @unique
   description  String
-  image        String?
   price        Float
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
+  image        String?
   status       Boolean?       @default(true)
   Subscription Subscription[]
 
@@ -127,7 +124,7 @@ model Coupon {
   expiredDate DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-  Order       Order[]
+  Order       Order?
 
   @@map("coupon")
 }
@@ -139,8 +136,8 @@ model Subscription {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   isActive  Boolean
-  plan      Plan     @relation(fields: [planId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  plan      Plan     @relation(fields: [planId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   Order     Order[]
 
   @@map("subscription")
@@ -161,9 +158,9 @@ model Order {
   totalPrice       Float?
   deliveryTime     DateTime?
   formOfPayment    FormOfPayment?
-  address          Address        @relation(fields: [addressId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  coupon           Coupon?        @relation(fields: [couponId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  subscription     Subscription   @relation(fields: [subscriptionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  address          Address        @relation(fields: [addressId], references: [id], onDelete: Cascade)
+  coupon           Coupon?        @relation(fields: [couponId], references: [id], onDelete: Cascade)
+  subscription     Subscription   @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
 
   @@map("order")
 }
@@ -177,9 +174,14 @@ model UsersToken {
   created_at DateTime  @default(now())
   updated_at DateTime  @updatedAt
   users_id   String
-  user       User      @relation(fields: [users_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user       User      @relation(fields: [users_id], references: [id], onDelete: Cascade)
 
   @@map("userstoken")
+}
+
+enum FormOfPayment {
+  creditCard @map("Cartão de crédito")
+  billet     @map("Boleto")
 }
 
 enum Gender {

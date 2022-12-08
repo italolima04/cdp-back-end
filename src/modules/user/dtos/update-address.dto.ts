@@ -24,4 +24,12 @@ export class UpdateAddressDTO {
   @IsString()
   @IsOptional()
   country?: string;
+
+  @IsString()
+  @IsOptional()
+  number: string;
+
+  @IsString()
+  @IsOptional()
+  complement: string;
 }

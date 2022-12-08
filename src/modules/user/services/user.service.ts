@@ -59,6 +59,7 @@ class UserService {
       data: {
         ...createUserDto,
         birthdate: new Date(createUserDto.birthdate),
+        complement: createUserDto.complement ?? undefined,
         password: await hash(
           createUserDto.password,
           parseInt(process.env.HASH_SALT),

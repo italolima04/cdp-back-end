@@ -3,6 +3,7 @@ import { Gender } from '@prisma/client';
 import {
   IsEmail,
   IsNotEmpty,
+  IsOptional,
   IsString,
   Matches,
   MaxLength,
@@ -118,6 +119,20 @@ class CreateUserDto {
     example: 'País Z',
   })
   country: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({
+    example: '1',
+  })
+  number: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty({
+    example: 'Aculá',
+  })
+  complement: string;
 }
 
 export default CreateUserDto;
