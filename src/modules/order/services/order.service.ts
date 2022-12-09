@@ -35,6 +35,7 @@ export class OrderService {
       complement,
       couponId,
       deliveryTime,
+      formOfPayment,
     } = createOrderDTO;
 
     const planExists = await this.prisma.plan.findUnique({
@@ -147,6 +148,7 @@ export class OrderService {
           deliveryTime,
           taxDelivery,
           totalPrice: valueOfOrder,
+          formOfPayment,
         },
       });
     }

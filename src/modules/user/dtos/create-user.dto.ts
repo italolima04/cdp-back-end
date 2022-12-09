@@ -93,12 +93,8 @@ class CreateUserDto {
 
   @IsString()
   @IsNotEmpty()
-  @Matches(/^[0-9]{5}-[0-9]{3}$/, {
-    message:
-      'O seu zipcode deve seguir o padrão de cinco dígitos, um traço e o restante dos três dígitos',
-  })
   @ApiProperty({
-    example: 'xxxxx-xx',
+    example: 'xxxxx-xxx',
   })
   zipcode: string;
 

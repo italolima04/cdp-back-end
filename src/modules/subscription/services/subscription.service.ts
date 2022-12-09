@@ -23,6 +23,9 @@ export class SubscriptionService {
           status: planActive,
         },
       },
+      orderBy: {
+        createdAt: 'desc',
+      },
       select: {
         id: true,
         isActive: true,
@@ -35,6 +38,20 @@ export class SubscriptionService {
             Subscription: {
               select: {
                 isActive: true,
+                Order: {
+                  select: {
+                    formOfPayment: true,
+                    taxDelivery: true,
+                    totalPrice: true,
+                    coupon: {
+                      select: {
+                        discount: true,
+                        benefit: true,
+                        description: true,
+                      },
+                    },
+                  },
+                },
               },
             },
           },
