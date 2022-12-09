@@ -69,10 +69,11 @@ export class OrderService {
     console.log(taxDelivery);
     console.log(couponExists?.discount);
 
-    valueOfOrder =
-      planExists.price + taxDelivery - Number(couponExists)
-        ? couponExists?.discount
-        : 0;
+    if (couponExists && couponExists.discount) {
+      valueOfOrder = planExists.price + taxDelivery - couponExists.discount;
+    }
+
+    console.log(valueOfOrder);
 
     let createdOrder: Order;
     if (couponExists) {
