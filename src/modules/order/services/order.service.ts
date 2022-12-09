@@ -65,7 +65,15 @@ export class OrderService {
       valueOfOrder = planExists.price;
     }
 
-    valueOfOrder = planExists.price + taxDelivery - couponExists?.discount;
+    console.log(planExists.price);
+    console.log(taxDelivery);
+    console.log(couponExists?.discount);
+
+    valueOfOrder =
+      planExists.price + taxDelivery - Number(couponExists)
+        ? couponExists?.discount
+        : 0;
+
     let createdOrder: Order;
     if (couponExists) {
       createdOrder = await this.prisma.order.create({
