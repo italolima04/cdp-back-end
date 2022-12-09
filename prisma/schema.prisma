@@ -94,6 +94,7 @@ model Address {
   zipcode       String
   state         String
   country       String
+  number        String   @default("1")
   complement    String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt

@@ -31,6 +31,7 @@ export class OrderService {
       street,
       neighbourhood,
       zipcode,
+      number,
       complement,
       couponId,
       deliveryTime,
@@ -91,6 +92,7 @@ export class OrderService {
               street,
               neighbourhood,
               zipcode,
+              number,
               complement: complement ? complement : undefined,
             },
           },
@@ -134,6 +136,7 @@ export class OrderService {
               street,
               neighbourhood,
               zipcode,
+              number,
               complement: complement ? complement : undefined,
             },
           },
@@ -172,20 +175,4 @@ export class OrderService {
       message: 'Order created successfully',
     };
   }
-
-  // findAll() {
-  //   return `This action returns all order`;
-  // }
-
-  // findOne(id: number) {
-  //   return `This action returns a #${id} order`;
-  // }
-
-  // update(id: number, updateOrderDto: UpdateOrderDto) {
-  //   return `This action updates a #${id} order`;
-  // }
-
-  // remove(id: number) {
-  //   return `This action removes a #${id} order`;
-  // }
 }

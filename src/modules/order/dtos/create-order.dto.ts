@@ -61,6 +61,11 @@ export class CreateOrderDTO {
   @ApiProperty()
   @IsString()
   @IsOptional()
+  number: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
   complement?: string;
 
   @ApiProperty()
