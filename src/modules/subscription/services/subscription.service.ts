@@ -75,9 +75,9 @@ export class SubscriptionService {
       throw new NotFoundException('Subscription does not found');
     }
 
-    if (!existsSubscription.isActive) {
-      throw new ConflictException(`This subscription it's already desable`);
-    }
+    // if (!existsSubscription.isActive) {
+    //   throw new ConflictException(`This subscription it's already desable`);
+    // }
 
     const disabledSubscription = await this.prisma.subscription.update({
       where: { id },
